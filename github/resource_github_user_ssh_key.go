@@ -93,8 +93,10 @@ func resourceGithubUserSshKeyCreate(ctx context.Context, d *schema.ResourceData,
 	if err = d.Set("title", userKey.GetTitle()); err != nil {
 		return diag.FromErr(err)
 	}
-	if err = d.Set("etag", resp.Header.Get("ETag")); err != nil {
-		return diag.FromErr(err)
+	if meta.storeEtag {
+		if err := d.Set("etag", resp.Header.Get("ETag")); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil
@@ -116,8 +118,10 @@ func resourceGithubUserSshKeyRead(ctx context.Context, d *schema.ResourceData, m
 	if err = d.Set("url", userKey.GetURL()); err != nil {
 		return diag.FromErr(err)
 	}
-	if err = d.Set("etag", resp.Header.Get("ETag")); err != nil {
-		return diag.FromErr(err)
+	if meta.storeEtag {
+		if err := d.Set("etag", resp.Header.Get("ETag")); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil

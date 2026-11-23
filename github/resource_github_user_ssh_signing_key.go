@@ -75,8 +75,10 @@ func resourceGithubUserSshSigningKeyCreate(ctx context.Context, d *schema.Resour
 	if err = d.Set("title", userKey.GetTitle()); err != nil {
 		return diag.FromErr(err)
 	}
-	if err = d.Set("etag", resp.Header.Get("ETag")); err != nil {
-		return diag.FromErr(err)
+	if meta.storeEtag {
+		if err := d.Set("etag", resp.Header.Get("ETag")); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil
@@ -95,8 +97,10 @@ func resourceGithubUserSshSigningKeyRead(ctx context.Context, d *schema.Resource
 	}
 
 	// set computed fields
-	if err = d.Set("etag", resp.Header.Get("ETag")); err != nil {
-		return diag.FromErr(err)
+	if meta.storeEtag {
+		if err := d.Set("etag", resp.Header.Get("ETag")); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil
