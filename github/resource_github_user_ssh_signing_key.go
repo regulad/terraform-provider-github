@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/google/go-github/v89/github"
+	"github.com/google/go-github/v92/github"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -59,9 +59,9 @@ func resourceGithubUserSshSigningKeyCreate(ctx context.Context, d *schema.Resour
 	title, _ := d.Get("title").(string)
 	key, _ := d.Get("key").(string)
 
-	userKey, resp, err := client.Users.CreateSSHSigningKey(ctx, &github.Key{
+	userKey, resp, err := client.Users.CreateSSHSigningKey(ctx, github.CreateSSHSigningKeyRequest{
 		Title: new(title),
-		Key:   new(key),
+		Key:   key,
 	})
 	if err != nil {
 		return diag.FromErr(err)
